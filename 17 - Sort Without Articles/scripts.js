@@ -2,20 +2,10 @@ const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'N
               'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog']
 const articles = ['The', 'A', 'An'];
 
-const bandsWithoutArticles = bands.map(band => {
-  const article = articles.find(article => band.includes(article + ' '));
-  if (article) {
-    return [Array.from(band).splice(article.length + 1, band.length).join(''), article + ' '];
-  } else {
-    return [band, ''];
-  }
-});
+function strip(bandName) {
+  return bandName.replace(/^(a |the |an )/i, '').trim();
+}
 
-const sortedBands = bandsWithoutArticles.sort((a, b) => (a[0] > b[0])? 1 : -1)
-                                        .map(band => band[1] + band[0]);
+const sortedBands = bands.sort((a, b) => strip(a) > strip(b) ? 1 : -1);
 
-const list = document.querySelector('#bands');
-
-list.innerHTML = sortedBands.map(band => {
-  return `<li>${band}</li>`;
-}).join('');
+document.querySelector('#bands').innerHTML = sortedBands.map(band => `<li>${band}</li>`).join('');
